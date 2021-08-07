@@ -7,7 +7,7 @@ private val inputFileName = "input.txt"
 
 // Reading all the text from file
 fun readFullFileAsString(): String {
-    return  Paths.get("", inputFileName).toFile().readText()
+    return Paths.get("", inputFileName).toFile().readText()
 }
 
 // Read a file line by line
@@ -16,8 +16,8 @@ fun readLineByLine() {
 }
 
 // Read all the lines of file into List of String
-fun readFileUsingUseLines(): List<String> {
-    return Paths.get("", inputFileName).toFile().useLines { it.toList() }
+fun readFileUsingUseLines(fileName: String): List<String> {
+    return Paths.get("", fileName).toFile().useLines { it.toList() }
 }
 
 fun main(args: Array<String>) {
@@ -33,7 +33,7 @@ fun main(args: Array<String>) {
     println("Text from File is :: $fromFile")
     println("-------------------------------------")
     readLineByLine()
-    val listOfLines: List<String>? = readFileUsingUseLines();
+    val listOfLines: List<String>? = readFileUsingUseLines(inputFileName);
     println("List of lines :: $listOfLines")
 
     println("$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&$&")
@@ -42,9 +42,8 @@ fun main(args: Array<String>) {
 }
 
 class FileA {
-    fun readFileUsingGetResource(fileName: String)
-            = this::class.java.getResource(fileName).readText(Charsets.UTF_8)
+    fun readFileUsingGetResource(fileName: String) = this::class.java.getResource(fileName).readText(Charsets.UTF_8)
 
-    fun readFileAsLinesUsingGetResourceAsStream(fileName: String)
-            = this::class.java.getResourceAsStream(fileName).bufferedReader().readLines()
+    fun readFileAsLinesUsingGetResourceAsStream(fileName: String) =
+        this::class.java.getResourceAsStream(fileName).bufferedReader().readLines()
 }

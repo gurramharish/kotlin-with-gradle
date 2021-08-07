@@ -11,6 +11,11 @@ class Calculator(val writer: ResultWriter) {
         total += x
         writer.write(total)
     }
+
+    fun div(a: Int, b: Int): Double {
+        assert(b != 0) {"Division by Zero"}
+        return a/b * 1.0;
+    }
 }
 
 interface ResultWriter {

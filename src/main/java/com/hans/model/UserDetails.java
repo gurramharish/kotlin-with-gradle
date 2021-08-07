@@ -3,7 +3,7 @@ package com.hans.model;
 import org.jetbrains.annotations.Nullable;
 
 public class UserDetails {
-    
+
     private String name;
     private int age;
     private UserDetails partner;

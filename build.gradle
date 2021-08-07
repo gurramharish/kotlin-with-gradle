@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.5.10'
+    id 'eclipse'
+    id 'idea'
 }
 
 group 'com.hans'
@@ -8,6 +10,20 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+}
+
+def myAttribute = Attribute.of("org.gradle.jvm.version", String)
+
+dependencies.attributesSchema {
+    attribute(myAttribute)
+}
+
+configurations {
+    myConfiguration {
+        attributes {
+            attribute(myAttribute, '8')
+        }
+    }
 }
 
 dependencies {
@@ -26,7 +42,8 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform {
-        includeEngines 'spek2'
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
     }
 }

@@ -30,7 +30,7 @@
 
 1. Functions in kotlin are defined using keyword `fun`
 
-```javascript
+```kotlin
 fun min(a: Int, b: Int): Int {
     return if(a < b) a else b
 }
@@ -38,7 +38,7 @@ fun min(a: Int, b: Int): Int {
 
 1. An immutable value is declared using the `val` keyword, such as value must be intialized once.
 
-```javascript
+```kotlin
 val name:String = "Harish" // No need to specify type kotlin can infer the type for the variables declared with val keyword
 
 val name = "Harish"
@@ -46,24 +46,24 @@ val name = "Harish"
 
 1. We can also declare variables using `var` keyword, which are mutable, can change over the lifetime of the applicaiton
 
-```javascript
+```kotlin
 var password:String // value can be assigned later
 ```
 
 1. String template support
 
-```javascript
+```kotlin
 val name = "Harish"
 print("My name is $name")
 ```
 
 1. Kotlin support classes
 
-```javascript
+```kotlin
 class Person(val name: String)
 ```
 
-```javascript
+```kotlin
 class Person {
     val name: String
     val numberOfChildern: Int
@@ -74,7 +74,7 @@ class Person {
 
 1. Interface
 
-```javascript
+```kotlin
 interface Signatory {
     fun sign()
 }
@@ -82,7 +82,7 @@ interface Signatory {
 
 1. Implementing an interface using (:)
 
-```javascript
+```kotlin
 // val is immutable, provides get method
 // var is mutable, provide getters and setters
 class Person(private val name: String, var age: Int) : Signatory {
@@ -107,7 +107,7 @@ fun main(args: Array<String>) {
 
 1. To derive sub classes using parent class we need to explicitly open the class.
 
-```javascript
+```kotlin
 open class Person(val name: String, var age: Int) : Signatory {
     override fun sign() {
         println("$name signned the documents")
@@ -122,7 +122,7 @@ class Student(name: String, age: Int) : Person(name, age) {}
 
 1. Secondary constructors can be created using `constructor` keyword
 
-```javascript
+```kotlin
 constructor(name: String, age: Int, isMarried: Boolean): this(name, age) {
     this.isMarried = isMarried
 }
@@ -132,25 +132,25 @@ constructor(name: String, age: Int, isMarried: Boolean): this(name, age) {
 
 1. Often we require data classes to pass the data between classes or functions. We can create data classes in kotlin using `data` keyword. By marking class with `data` keyword, kotlin provides equals, hashcode, toString (and other) functions.
 
-```javascript
+```kotlin
 data class User(val name: String, val id: Int)
 ```
 
 1. Kotlin has destruction support for data classes by providng getComponent1 to n methods to destruct
 
-```javascript
+```kotlin
 val (name, id) = person
 ```
 
 1. We can clone the data objects using `copy` method provided by kotlin in data classes
 
-```javascript
+```kotlin
 val sai = harish.copy(id = 31)
 ```
 
 ### Higher Order Functions
 
-```javascript
+```kotlin
 fun getAllProviderDetails(filter: String): List<ProviderDetails> {
     val providers = getProviders()
     val allProviderDetails = mutableListOf<ProviderDetails>()
@@ -158,4 +158,87 @@ fun getAllProviderDetails(filter: String): List<ProviderDetails> {
         .filter { it.key.toString().contains(filter, true) }
         .map { ProviderDetails(provider.name, it.key.toString()) }}
 }
+```
+
+
+# Testing in Kotlin
+
+## Unit Testing in Kotlin using DSL
+
+1. We can use Spek library for writing unit test in BDD style.
+
+2. Spek is open source library by jetbrains, we have plugin and library
+
+## Mocking Using MockK
+
+### Add dependency to pom.xml or gradle
+
+```text
+<!-- https://mvnrepository.com/artifact/io.mockk/mockk -->
+<dependency>
+    <groupId>io.mockk</groupId>
+    <artifactId>mockk</artifactId>
+    <version>1.12.0</version>
+    <scope>test</scope>
+</dependency>
+
+OR
+
+io.mockk:mockk:1.10.3-jdk8
+```
+
+### Creating mock objects in test cases
+
+```kotlin
+val questionRepository = mockk<IQuestionRepository>()
+val userRepository = mockk<UserRepository>()
+```
+
+### Mocking behaviour
+
+```kotlin
+every { userRepository.getUser(any()) } returns User(1, "Harish", "Gurram") // When there is a return type
+
+every { questionRepository.update(any()) } just Runs // When the method returns Unit or void
+```
+
+### Mocking Exceptions
+
+```kotlin
+every { questionRepository.update(any()) } throws Exception()
+```
+
+### Mocking static methods
+
+```kotlin
+mockkStatic(Files::class)
+every { Files.lines(any()) } answers { Stream.of("Harish", "Sai") }
+
+// After finishing the testing we need to un mock the static method, if not mock will be applied for all the test cases
+unmockkStatic(Files::class)
+```
+
+### MockK's Annotations
+
+1. `@MockK` annotation is used to create mock objects
+
+```kotlin
+@MockK
+lateinit var questionRepository: QuestionRepository
+
+// to init the mocks
+init {
+    MockKAnnotations.init(this)
+}
+```
+
+1. All the mocks created using mockk() method and @MockK annotation are strict mocks. If a method is not mocked using every, test case will fail. To ignore un mocked calls from throwing exception, we can create mocks using `@RelaxedMockK` annotation.
+
+```kotlin
+@RelaxedMockK
+lateinit var questionRepository: QuestionRepository
+
+Or
+
+val mockQuestionRepository = mockk<IQuestionRepository>(relaxUnitFun = true)
 ```

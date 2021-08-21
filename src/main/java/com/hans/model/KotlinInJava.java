@@ -3,6 +3,7 @@ package com.hans.model;
 import com.hans.Meeting;
 import com.hans.MeetingException;
 import com.hans.coursera.kforj._01basics.Util;
+import com.hans.coursera.kforj._03extensions.ExtensionFunctionsKt;
 import com.hans.signatory.Person;
 
 public class KotlinInJava {
@@ -19,7 +20,11 @@ public class KotlinInJava {
         try {
             board.addAttendee("");
         }catch (MeetingException e) {
+            System.out.println("Failed to add attendee");
             e.printStackTrace();
         }
+        System.out.println("========================");
+        System.out.println("Last charcter in abc : " + ExtensionFunctionsKt.lastChar("abc"));
+        System.out.println("Repeat abc 4 times : " + ExtensionFunctionsKt.repeat("abc", 4));
     }
 }

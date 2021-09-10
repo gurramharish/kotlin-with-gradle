@@ -49,8 +49,8 @@ fun getPatternDDMMMYYYY(): String = """\d{2} $month \d{4}"""
 fun getPatternDDMMYYYY() = """\d{2}\.\d{2}\.\d{4}"""
 
 
-infix fun Int.power(power: Int): Int {
-    var result = this
+infix fun Int.power(power: Int): Long {
+    var result = this.toLong()
     for(c in 1 until power) {
         result *= this
     }

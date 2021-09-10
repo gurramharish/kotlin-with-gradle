@@ -39,6 +39,6 @@ fun List<Int>.findTripleOfSum(sum: Int) = firstNotNullOfOrNull { x ->
 fun List<Int>.findPairOfSum(sum: Int): Pair<Int, Int>? {
     val complements = associateBy { sum - it }
     return firstNotNullOfOrNull { key ->
-      complements[key]?.let { c -> Pair(key, c) }
+      complements[key]?.let { c -> key to c }
     }
 }
